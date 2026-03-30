@@ -1,0 +1,11 @@
+*.o
+*.out
+server_bin
+build/
+logs/*.log
+__pycache__/
+*.pyc
+.venv/
+bin/
+target/
+.DS_Store
