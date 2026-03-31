@@ -1,0 +1,2 @@
+# Este cliente usa únicamente librerías estándar de Python.
+# No requiere instalación de paquetes externos.
