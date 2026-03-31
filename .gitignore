@@ -9,3 +9,4 @@ __pycache__/
 bin/
 target/
 .DS_Store
+venv
