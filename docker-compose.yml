@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  server:
+    build: .
+    container_name: iot-server
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    volumes:
+      - ./logs:/app/logs
+    command: >
+      ./server_bin
+      --auth-host auth-service
+      --auth-port 5000
+      --log-dir /app/logs
+    depends_on:
+      - auth-service
+    restart: unless-stopped
+
+  auth-service:
+    build: ./auth_service
+    container_name: iot-auth
+    expose:
+      - "5000"
+    restart: unless-stopped
