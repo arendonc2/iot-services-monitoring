@@ -79,8 +79,14 @@ int state_register_sensor(const char *id, SensorType type)
     for (int i = 0; i < MAX_SENSORS; i++) {
         if (g_state.sensors[i].active &&
             strcmp(g_state.sensors[i].id, id) == 0) {
+            if (g_state.sensors[i].status == STATUS_INACTIVE) {
+                /* Reactivar sensor que había enviado QUIT */
+                g_state.sensors[i].status = STATUS_ACTIVE;
+                pthread_mutex_unlock(&g_state.lock);
+                return 0;
+            }
             pthread_mutex_unlock(&g_state.lock);
-            return -2;  /* Ya existe */
+            return -2;  /* Ya existe y está activo */
         }
     }
 

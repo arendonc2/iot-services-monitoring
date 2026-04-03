@@ -33,50 +33,82 @@ typedef struct {
 
 static const char *CSS_STYLE =
     "<style>"
+    ":root { --bg:#0b1220; --panel:#101a2d; --panel-soft:#16233a; --line:#2b3f5f;"
+    "        --text:#edf4ff; --muted:#8ea4c5; --cyan:#68d5ff; --amber:#ffc857;"
+    "        --good:#52d39a; --bad:#ff7c70; --accent:#7aa2ff; }"
     "* { margin:0; padding:0; box-sizing:border-box; }"
-    "body { font-family:'Segoe UI',Roboto,sans-serif; background:#0f0f23; "
-    "       color:#e0e0e0; min-height:100vh; }"
-    "nav { background:linear-gradient(135deg,#1a1a40,#2d2d6b); padding:16px 32px; "
-    "      display:flex; align-items:center; gap:24px; "
-    "      box-shadow:0 2px 12px rgba(0,0,0,0.4); }"
-    "nav a { color:#7eb8ff; text-decoration:none; font-weight:500; "
-    "        padding:8px 16px; border-radius:8px; transition:all .2s; }"
-    "nav a:hover { background:rgba(126,184,255,0.15); color:#a8d4ff; }"
-    "nav .brand { font-size:1.3em; font-weight:700; color:#fff; margin-right:auto; }"
-    ".container { max-width:1100px; margin:32px auto; padding:0 24px; }"
-    "h1 { color:#7eb8ff; margin-bottom:24px; font-size:1.8em; }"
-    ".card { background:linear-gradient(145deg,#1a1a3e,#22224a); "
-    "        border-radius:12px; padding:24px; margin-bottom:20px; "
-    "        border:1px solid #2a2a5a; box-shadow:0 4px 16px rgba(0,0,0,0.3); }"
-    ".stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; }"
-    ".stat-card { background:linear-gradient(145deg,#1e1e4a,#2a2a5e); "
-    "             border-radius:12px; padding:24px; text-align:center; "
-    "             border:1px solid #3a3a6a; }"
-    ".stat-card .number { font-size:2.5em; font-weight:700; color:#7eb8ff; }"
-    ".stat-card .label  { font-size:0.9em; color:#888; margin-top:8px; }"
-    "table { width:100%; border-collapse:collapse; margin-top:12px; }"
-    "th { background:#1a1a40; color:#7eb8ff; padding:12px 16px; "
-    "     text-align:left; font-weight:600; }"
-    "td { padding:10px 16px; border-bottom:1px solid #2a2a5a; }"
-    "tr:hover { background:rgba(126,184,255,0.05); }"
-    ".badge { padding:4px 12px; border-radius:20px; font-size:0.85em; font-weight:600; }"
-    ".badge-active  { background:#0a4a2a; color:#4ade80; }"
-    ".badge-inactive{ background:#4a1a1a; color:#f87171; }"
-    ".badge-normal  { background:#0a4a2a; color:#4ade80; }"
-    ".badge-alert   { background:#4a1a1a; color:#f87171; }"
-    ".login-box { max-width:400px; margin:80px auto; text-align:center; }"
-    ".login-box form { margin-top:24px; }"
-    ".login-box input[type=text] { padding:12px 16px; border-radius:8px; "
-    "  border:1px solid #3a3a6a; background:#1a1a3e; color:#e0e0e0; "
-    "  font-size:1em; width:100%; margin-bottom:16px; }"
-    ".login-box button { padding:12px 32px; border-radius:8px; "
-    "  border:none; background:linear-gradient(135deg,#3b82f6,#6366f1); "
-    "  color:#fff; font-size:1em; cursor:pointer; font-weight:600; "
-    "  transition:all .2s; }"
-    ".login-box button:hover { transform:translateY(-2px); "
-    "  box-shadow:0 4px 16px rgba(99,102,241,0.4); }"
-    ".msg-ok    { color:#4ade80; margin:20px 0; }"
-    ".msg-error { color:#f87171; margin:20px 0; }"
+    "body { font-family:'Avenir Next','Helvetica Neue','Segoe UI',sans-serif;"
+    "       color:var(--text); min-height:100vh; background:radial-gradient(circle at top left,#14304f 0,#0b1220 45%),"
+    "       linear-gradient(135deg,#08111f,#0b1220 55%,#0f1a2d); }"
+    "body::before { content:''; position:fixed; inset:0; pointer-events:none;"
+    "       background-image:linear-gradient(rgba(104,213,255,.08) 1px,transparent 1px),"
+    "       linear-gradient(90deg,rgba(104,213,255,.08) 1px,transparent 1px);"
+    "       background-size:36px 36px; mask-image:linear-gradient(to bottom,rgba(0,0,0,.6),transparent 75%); }"
+    "nav { position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:14px;"
+    "      padding:18px 28px; background:rgba(6,13,24,.82); backdrop-filter:blur(18px);"
+    "      border-bottom:1px solid rgba(122,162,255,.18); }"
+    "nav .brand { margin-right:auto; color:#fff; font-size:1.1rem; font-weight:800;"
+    "      letter-spacing:.08em; text-transform:uppercase; }"
+    "nav .brand small { display:block; font-size:.68rem; color:var(--muted); font-weight:600; }"
+    "nav a { color:var(--muted); text-decoration:none; font-weight:700; font-size:.93rem;"
+    "      letter-spacing:.03em; padding:10px 14px; border-radius:999px; border:1px solid transparent;"
+    "      transition:all .2s ease; }"
+    "nav a:hover { color:var(--text); border-color:rgba(122,162,255,.28); background:rgba(122,162,255,.1); }"
+    ".container { max-width:1200px; margin:0 auto; padding:36px 24px 64px; }"
+    ".hero { display:grid; grid-template-columns:1.5fr 1fr; gap:20px; margin-bottom:24px; }"
+    ".hero-panel, .card, .stat-card, .info-card { background:linear-gradient(180deg,rgba(19,31,52,.96),rgba(11,20,34,.94));"
+    "      border:1px solid rgba(122,162,255,.16); border-radius:22px; box-shadow:0 24px 60px rgba(0,0,0,.3); }"
+    ".hero-panel { padding:28px; position:relative; overflow:hidden; }"
+    ".hero-panel::after { content:''; position:absolute; inset:auto -60px -60px auto; width:180px; height:180px;"
+    "      background:radial-gradient(circle,rgba(255,200,87,.22),transparent 70%); }"
+    ".eyebrow { display:inline-flex; align-items:center; gap:10px; padding:8px 12px; border-radius:999px;"
+    "      background:rgba(104,213,255,.1); color:var(--cyan); font-size:.78rem; font-weight:800; letter-spacing:.08em;"
+    "      text-transform:uppercase; margin-bottom:18px; }"
+    "h1 { font-size:clamp(2rem,4vw,3.4rem); line-height:1; margin-bottom:14px; letter-spacing:-.04em; }"
+    "h2 { font-size:1.45rem; margin-bottom:10px; }"
+    "p { color:var(--muted); line-height:1.6; }"
+    ".hero-copy { max-width:42rem; }"
+    ".hero-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-top:24px; }"
+    ".mini-panel { padding:16px; border-radius:18px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06); }"
+    ".mini-panel strong { display:block; color:var(--text); margin-bottom:4px; font-size:1.2rem; }"
+    ".card { padding:24px; margin-bottom:20px; }"
+    ".card-title { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-bottom:18px; }"
+    ".card-title p { max-width:44rem; }"
+    ".stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-bottom:24px; }"
+    ".stat-card { padding:22px; position:relative; overflow:hidden; }"
+    ".stat-card::before { content:''; position:absolute; inset:0 auto 0 0; width:4px; background:linear-gradient(180deg,var(--cyan),var(--amber)); }"
+    ".stat-card .number { font-size:2.4rem; font-weight:800; letter-spacing:-.05em; color:var(--text); }"
+    ".stat-card .label { color:var(--muted); text-transform:uppercase; letter-spacing:.08em; font-size:.74rem; margin-top:8px; }"
+    ".stat-card .delta { color:var(--cyan); font-size:.82rem; margin-top:10px; }"
+    ".info-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px; margin-top:18px; }"
+    ".info-card { padding:20px; }"
+    ".info-card ul { list-style:none; margin-top:12px; }"
+    ".info-card li { color:var(--muted); padding:8px 0; border-bottom:1px solid rgba(255,255,255,.06); }"
+    ".info-card li:last-child { border-bottom:none; }"
+    ".table-wrap { overflow:auto; border-radius:18px; border:1px solid rgba(255,255,255,.06); }"
+    "table { width:100%; border-collapse:collapse; min-width:720px; }"
+    "th { padding:14px 16px; text-align:left; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;"
+    "     color:var(--cyan); background:rgba(8,17,31,.88); }"
+    "td { padding:14px 16px; border-top:1px solid rgba(255,255,255,.06); color:#d6e4fb; }"
+    "tr:hover td { background:rgba(122,162,255,.06); }"
+    ".badge { display:inline-flex; align-items:center; justify-content:center; padding:6px 12px; border-radius:999px;"
+    "      font-size:.78rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase; }"
+    ".badge-active, .badge-normal { background:rgba(82,211,154,.14); color:var(--good); }"
+    ".badge-inactive, .badge-alert { background:rgba(255,124,112,.14); color:var(--bad); }"
+    ".badge-accent { background:rgba(255,200,87,.14); color:var(--amber); }"
+    ".login-box { max-width:460px; margin:0 auto; text-align:left; }"
+    ".login-box form { margin-top:22px; }"
+    ".login-box input[type=text] { width:100%; margin-bottom:14px; padding:14px 16px; border-radius:14px;"
+    "      border:1px solid rgba(122,162,255,.22); background:rgba(255,255,255,.04); color:var(--text); font-size:1rem; }"
+    ".login-box button, .cta-link { display:inline-flex; align-items:center; justify-content:center; gap:8px;"
+    "      padding:13px 20px; border:none; border-radius:999px; cursor:pointer; font-weight:800; font-size:.95rem;"
+    "      color:#06111d; background:linear-gradient(135deg,var(--amber),#ff9d5c); text-decoration:none; box-shadow:0 12px 30px rgba(255,157,92,.22); }"
+    ".login-box button:hover, .cta-link:hover { filter:brightness(1.05); }"
+    ".msg-ok { color:var(--good); margin:18px 0; }"
+    ".msg-error { color:var(--bad); margin:18px 0; }"
+    ".empty-state { padding:28px; border:1px dashed rgba(122,162,255,.24); border-radius:18px; color:var(--muted); }"
+    ".footer-note { margin-top:16px; font-size:.84rem; color:var(--muted); }"
+    "@media (max-width: 820px) { .hero { grid-template-columns:1fr; } nav { flex-wrap:wrap; } .container { padding:24px 16px 48px; } }"
     "</style>";
 
 /* ── Prototipos internos ────────────────────────────────────────── */
@@ -284,7 +316,7 @@ static void build_nav(char *buf, size_t size)
 {
     snprintf(buf, size,
         "<nav>"
-        "<span class='brand'>&#x1F4E1; IoT Monitor</span>"
+        "<span class='brand'>IoT Monitor<small>Operator console</small></span>"
         "<a href='/'>Inicio</a>"
         "<a href='/dashboard'>Dashboard</a>"
         "<a href='/sensors'>Sensores</a>"
@@ -309,13 +341,28 @@ static void route_home(int fd, const char *ip, int port, const char *req_line)
         "</head><body>"
         "%s"
         "<div class='container'>"
-        "<div class='login-box card'>"
-        "<h1>&#x1F512; Acceso Operador</h1>"
-        "<p>Ingresa tu usuario para acceder al panel de monitoreo.</p>"
+        "<div class='hero'>"
+        "<section class='hero-panel'>"
+        "<div class='eyebrow'>Centro de operaciones</div>"
+        "<h1>Monitoreo industrial para operadores en tiempo real</h1>"
+        "<p class='hero-copy'>Supervisa el pulso de la red IoT, detecta anomal&iacute;as y accede al estado operativo de sensores desde una consola clara y enfocada en respuesta r&aacute;pida.</p>"
+        "<div class='hero-grid'>"
+        "<div class='mini-panel'><strong>Sensores</strong><span>Vista operativa de TEMP, VIB y POWER.</span></div>"
+        "<div class='mini-panel'><strong>Alertas</strong><span>Umbrales visibles y trazabilidad de incidentes.</span></div>"
+        "<div class='mini-panel'><strong>M&eacute;tricas</strong><span>Registro continuo con &uacute;ltimo valor y timestamp.</span></div>"
+        "<div class='mini-panel'><strong>HTTP + TCP</strong><span>Operaci&oacute;n integrada con panel y protocolo SMP.</span></div>"
+        "</div>"
+        "</section>"
+        "<aside class='hero-panel login-box'>"
+        "<div class='eyebrow'>Acceso seguro</div>"
+        "<h2>Ingresar como operador</h2>"
+        "<p>Escribe tu usuario para validar acceso y abrir el panel de supervisi&oacute;n.</p>"
         "<form action='/login' method='get'>"
-        "<input type='text' name='user' placeholder='Usuario' required>"
-        "<br><button type='submit'>Iniciar Sesi&oacute;n</button>"
+        "<input type='text' name='user' placeholder='Usuario operador' required>"
+        "<button type='submit'>Entrar al panel</button>"
         "</form>"
+        "<p class='footer-note'>Si el auth service no est&aacute; disponible, ver&aacute;s una respuesta expl&iacute;cita del sistema.</p>"
+        "</aside>"
         "</div>"
         "</div>"
         "</body></html>",
@@ -438,24 +485,58 @@ static void route_dashboard(int fd, const char *ip, int port, const char *req_li
         "<meta charset='UTF-8'><title>Dashboard</title>%s"
         "</head><body>%s"
         "<div class='container'>"
-        "<h1>&#x1F4CA; Dashboard</h1>"
+        "<div class='hero'>"
+        "<section class='hero-panel'>"
+        "<div class='eyebrow'>Dashboard operativo</div>"
+        "<h1>Estado general de la instalaci&oacute;n</h1>"
+        "<p class='hero-copy'>Lectura r&aacute;pida del sistema para turnos operativos: sensores registrados, actividad actual, incidentes y flujo de telemetr&iacute;a acumulado.</p>"
+        "</section>"
+        "<aside class='hero-panel'>"
+        "<div class='eyebrow'>Prioridad</div>"
+        "<h2>Foco actual</h2>"
+        "<p>Usa Sensores para revisar estado individual, Alertas para incidentes y M&eacute;tricas para la trazabilidad reciente.</p>"
+        "<div class='footer-note'>HTTP en 8080 y SMP en 9090 seg&uacute;n configuraci&oacute;n actual del servidor.</div>"
+        "</aside>"
+        "</div>"
         "<div class='stats'>"
         "<div class='stat-card'>"
         "  <div class='number'>%d</div>"
         "  <div class='label'>Sensores Registrados</div>"
+        "  <div class='delta'>Inventario total conocido</div>"
         "</div>"
         "<div class='stat-card'>"
         "  <div class='number'>%d</div>"
         "  <div class='label'>Sensores Activos</div>"
+        "  <div class='delta'>Con sesi&oacute;n SMP abierta</div>"
         "</div>"
         "<div class='stat-card'>"
         "  <div class='number'>%d</div>"
         "  <div class='label'>Alertas Registradas</div>"
+        "  <div class='delta'>Eventos fuera de umbral</div>"
         "</div>"
         "<div class='stat-card'>"
         "  <div class='number'>%d</div>"
         "  <div class='label'>M&eacute;tricas Recibidas</div>"
+        "  <div class='delta'>Telemetr&iacute;a acumulada</div>"
         "</div>"
+        "</div>"
+        "<div class='info-grid'>"
+        "<section class='info-card'>"
+        "<h2>Lectura recomendada</h2>"
+        "<ul>"
+        "<li>Si alertas sube y activos cae, revisa desconexiones o QUIT de sensores.</li>"
+        "<li>Valores an&oacute;malos actualizan el nivel ALERT del sensor inmediatamente.</li>"
+        "<li>El dashboard resume el sistema; el detalle fino est&aacute; en las tablas.</li>"
+        "</ul>"
+        "</section>"
+        "<section class='info-card'>"
+        "<h2>Accesos r&aacute;pidos</h2>"
+        "<ul>"
+        "<li><a class='cta-link' href='/sensors'>Revisar sensores</a></li>"
+        "<li><a class='cta-link' href='/alerts'>Abrir alertas</a></li>"
+        "<li><a class='cta-link' href='/metrics'>Ver m&eacute;tricas</a></li>"
+        "</ul>"
+        "</section>"
         "</div>"
         "</div></body></html>",
         CSS_STYLE, nav, total, active, alerts, metrics);
@@ -472,18 +553,32 @@ static void route_sensors(int fd, const char *ip, int port, const char *req_line
 
     char body[HTTP_RESPONSE_MAX];
     int  offset = 0;
+    int  total_sensors = 0;
+    int  active_sensors = 0;
+    int  alert_sensors = 0;
 
     offset += snprintf(body + offset, sizeof(body) - offset,
         "<!DOCTYPE html><html><head>"
         "<meta charset='UTF-8'><title>Sensores</title>%s"
         "</head><body>%s"
         "<div class='container'>"
-        "<h1>&#x1F4E1; Sensores Registrados</h1>"
         "<div class='card'>"
-        "<table>"
+        "<div class='card-title'>"
+        "<div><div class='eyebrow'>Inventario de campo</div><h2>Sensores registrados</h2>"
+        "<p>Vista de estado, &uacute;ltimo valor reportado y nivel de alerta por dispositivo.</p></div>"
+        "<span class='badge badge-accent'>Tabla operativa</span>"
+        "</div>"
+        "<div class='stats'>"
+        "<div class='stat-card'><div class='number'>%d</div><div class='label'>Registrados</div></div>"
+        "<div class='stat-card'><div class='number'>%d</div><div class='label'>Activos</div></div>"
+        "<div class='stat-card'><div class='number'>%d</div><div class='label'>En alerta</div></div>"
+        "</div>"
+        "</div>"
+        "<div class='card'>"
+        "<div class='table-wrap'><table>"
         "<tr><th>ID</th><th>Tipo</th><th>Estado</th>"
         "<th>&Uacute;ltimo Valor</th><th>Timestamp</th><th>Alerta</th></tr>",
-        CSS_STYLE, nav);
+        CSS_STYLE, nav, 0, 0, 0);
 
     pthread_mutex_lock(&g_state.lock);
 
@@ -492,6 +587,11 @@ static void route_sensors(int fd, const char *ip, int port, const char *req_line
             continue;
 
         Sensor *s = &g_state.sensors[i];
+        total_sensors++;
+        if (s->status == STATUS_ACTIVE)
+            active_sensors++;
+        if (s->alert_level == ALERT_ALERT)
+            alert_sensors++;
 
         const char *status_badge = (s->status == STATUS_ACTIVE)
             ? "<span class='badge badge-active'>ACTIVE</span>"
@@ -511,8 +611,32 @@ static void route_sensors(int fd, const char *ip, int port, const char *req_line
 
     pthread_mutex_unlock(&g_state.lock);
 
+    {
+        char stats_html[1024];
+        snprintf(stats_html, sizeof(stats_html),
+            "<div class='stat-card'><div class='number'>%d</div><div class='label'>Registrados</div></div>"
+            "<div class='stat-card'><div class='number'>%d</div><div class='label'>Activos</div></div>"
+            "<div class='stat-card'><div class='number'>%d</div><div class='label'>En alerta</div></div>",
+            total_sensors, active_sensors, alert_sensors);
+
+        char *stats_pos = strstr(body, "<div class='stat-card'><div class='number'>0</div><div class='label'>Registrados</div></div>"
+                                      "<div class='stat-card'><div class='number'>0</div><div class='label'>Activos</div></div>"
+                                      "<div class='stat-card'><div class='number'>0</div><div class='label'>En alerta</div></div>");
+        if (stats_pos != NULL) {
+            char tail[HTTP_RESPONSE_MAX];
+            safe_strncpy(tail, stats_pos + strlen("<div class='stat-card'><div class='number'>0</div><div class='label'>Registrados</div></div>"
+                                                   "<div class='stat-card'><div class='number'>0</div><div class='label'>Activos</div></div>"
+                                                   "<div class='stat-card'><div class='number'>0</div><div class='label'>En alerta</div></div>"),
+                         sizeof(tail));
+            *stats_pos = '\0';
+            strncat(body, stats_html, sizeof(body) - strlen(body) - 1);
+            strncat(body, tail, sizeof(body) - strlen(body) - 1);
+            offset = (int)strlen(body);
+        }
+    }
+
     offset += snprintf(body + offset, sizeof(body) - offset,
-        "</table></div></div></body></html>");
+        "</table></div></div></div></body></html>");
 
     http_log_and_send(fd, ip, port, req_line, 200, "OK", body);
 }
@@ -526,18 +650,29 @@ static void route_alerts(int fd, const char *ip, int port, const char *req_line)
 
     char body[HTTP_RESPONSE_MAX];
     int  offset = 0;
+    int  count_snapshot = state_get_alert_count();
 
     offset += snprintf(body + offset, sizeof(body) - offset,
         "<!DOCTYPE html><html><head>"
         "<meta charset='UTF-8'><title>Alertas</title>%s"
         "</head><body>%s"
         "<div class='container'>"
-        "<h1>&#x1F6A8; Alertas</h1>"
         "<div class='card'>"
-        "<table>"
+        "<div class='card-title'>"
+        "<div><div class='eyebrow'>Eventos de riesgo</div><h2>Alertas registradas</h2>"
+        "<p>Incidentes ordenados desde el m&aacute;s reciente, con valor observado, umbral y timestamp.</p></div>"
+        "<span class='badge badge-alert'>Atenci&oacute;n prioritaria</span>"
+        "</div>"
+        "<div class='stats'>"
+        "<div class='stat-card'><div class='number'>%d</div><div class='label'>Alertas acumuladas</div></div>"
+        "<div class='stat-card'><div class='number'>70 / 50 / 10-100</div><div class='label'>Umbrales TEMP / VIB / POWER</div></div>"
+        "</div>"
+        "</div>"
+        "<div class='card'>"
+        "<div class='table-wrap'><table>"
         "<tr><th>Sensor</th><th>Tipo</th><th>Valor</th>"
         "<th>Umbral</th><th>Mensaje</th><th>Timestamp</th></tr>",
-        CSS_STYLE, nav);
+        CSS_STYLE, nav, count_snapshot);
 
     pthread_mutex_lock(&g_state.lock);
 
@@ -557,7 +692,7 @@ static void route_alerts(int fd, const char *ip, int port, const char *req_line)
     pthread_mutex_unlock(&g_state.lock);
 
     offset += snprintf(body + offset, sizeof(body) - offset,
-        "</table></div></div></body></html>");
+        "</table></div></div></div></body></html>");
 
     http_log_and_send(fd, ip, port, req_line, 200, "OK", body);
 }
@@ -571,18 +706,29 @@ static void route_metrics(int fd, const char *ip, int port, const char *req_line
 
     char body[HTTP_RESPONSE_MAX];
     int  offset = 0;
+    int  count_snapshot = state_get_metric_count();
 
     offset += snprintf(body + offset, sizeof(body) - offset,
         "<!DOCTYPE html><html><head>"
         "<meta charset='UTF-8'><title>M&eacute;tricas</title>%s"
         "</head><body>%s"
         "<div class='container'>"
-        "<h1>&#x1F4C8; &Uacute;ltimas M&eacute;tricas</h1>"
         "<div class='card'>"
-        "<table>"
+        "<div class='card-title'>"
+        "<div><div class='eyebrow'>Historial reciente</div><h2>&Uacute;ltimas m&eacute;tricas</h2>"
+        "<p>Traza descendente del flujo de telemetr&iacute;a almacenado en memoria por el servidor.</p></div>"
+        "<span class='badge badge-accent'>Buffer circular</span>"
+        "</div>"
+        "<div class='stats'>"
+        "<div class='stat-card'><div class='number'>%d</div><div class='label'>M&eacute;tricas almacenadas</div></div>"
+        "<div class='stat-card'><div class='number'>512</div><div class='label'>Capacidad m&aacute;xima del buffer</div></div>"
+        "</div>"
+        "</div>"
+        "<div class='card'>"
+        "<div class='table-wrap'><table>"
         "<tr><th>Sensor</th><th>Tipo</th>"
         "<th>Valor</th><th>Timestamp</th></tr>",
-        CSS_STYLE, nav);
+        CSS_STYLE, nav, count_snapshot);
 
     pthread_mutex_lock(&g_state.lock);
 
@@ -600,7 +746,7 @@ static void route_metrics(int fd, const char *ip, int port, const char *req_line
     pthread_mutex_unlock(&g_state.lock);
 
     offset += snprintf(body + offset, sizeof(body) - offset,
-        "</table></div></div></body></html>");
+        "</table></div></div></div></body></html>");
 
     http_log_and_send(fd, ip, port, req_line, 200, "OK", body);
 }
@@ -618,10 +764,11 @@ static void route_not_found(int fd, const char *ip, int port, const char *req_li
         "<meta charset='UTF-8'><title>404</title>%s"
         "</head><body>%s"
         "<div class='container'>"
-        "<div class='card'>"
-        "<h1>&#x1F50D; 404 — P&aacute;gina no encontrada</h1>"
-        "<p>La ruta solicitada no existe.</p>"
-        "<a href='/'>&#x2190; Volver al inicio</a>"
+        "<div class='hero-panel'>"
+        "<div class='eyebrow'>Ruta no disponible</div>"
+        "<h1>404 &mdash; P&aacute;gina no encontrada</h1>"
+        "<p>La ruta solicitada no existe dentro de la consola de operadores.</p>"
+        "<p class='footer-note'><a class='cta-link' href='/'>Volver al inicio</a></p>"
         "</div></div></body></html>",
         CSS_STYLE, nav);
 
