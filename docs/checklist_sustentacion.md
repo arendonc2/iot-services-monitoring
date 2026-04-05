@@ -85,15 +85,49 @@
 12. [ ] `docker-compose logs -f iot-server` — ver logs en vivo
 13. [ ] `docker-compose down` — cierre limpio
 
-## 11. Preguntas Difíciles y Respuestas
+## 11. Configuración DNS — Registro y Evidencia
 
-| Pregunta | Respuesta |
-|----------|-----------|
-| ¿Qué pasa si dos sensores se registran al mismo tiempo? | El mutex serializa las escrituras. Solo uno entra a la sección crítica a la vez. |
-| ¿Qué pasa si la tabla de sensores se llena? | Retorna `500 INTERNAL_ERROR`. El servidor sigue funcionando para los sensores ya registrados. |
-| ¿Qué pasa si el auth service se cae? | `auth_client.c` retorna error, el HTTP server muestra "500 Internal Server Error" con mensaje descriptivo. El servidor no se cae. |
-| ¿Qué pasa si un sensor envía datos sin registrarse? | Retorna `404 SENSOR_NOT_FOUND`. |
-| ¿Hay race conditions? | No. Todo acceso a `g_state` está protegido por mutex. El logger tiene su propio mutex. |
-| ¿Por qué no usaste `select()` o `epoll()`? | Thread-per-connection es más simple, más fácil de explicar, y suficiente para el volumen esperado. |
-| ¿Hay memory leaks? | No. Los arrays son fijos (stack/global). Los únicos `malloc` son para `SensorClientInfo` y `HttpClientInfo`, ambos con `free` en el thread. |
-| ¿Por qué Flask para el auth y no C? | Es un servicio **externo** separado. Usar otro lenguaje demuestra desacoplamiento de servicios, que es el objetivo. |
+### ¿Qué se usó?
+
+**nip.io** — DNS wildcard gratuito. No se compró ni registró ningún dominio.
+El servicio funciona embebiendo la IP dentro del hostname: nip.io la resuelve automáticamente.
+
+| Hostname | Resuelve a | Uso |
+|---|---|---|
+| `iot-monitor.44.193.101.27.nip.io` | `44.193.101.27` | Dashboard HTTP + conexión de sensores |
+| `auth.44.193.101.27.nip.io` | `44.193.101.27` | Referencia al servicio de autenticación |
+
+### Verificación
+
+```bash
+nslookup iot-monitor.44.193.101.27.nip.io
+# Resultado: 44.193.101.27
+```
+
+### Resolución interna (Docker DNS)
+
+En `docker-compose.yml` (línea 14), el servidor C recibe `--auth-host auth-service`.
+Docker Compose crea una red virtual donde el nombre del servicio (`auth-service`) se resuelve
+a la IP interna del contenedor Flask. No hay configuración DNS manual.
+
+El puerto 5000 del auth service usa `expose` (línea 24-25) en lugar de `ports`,
+lo que lo hace accesible **solo dentro de la red Docker**, no desde internet.
+
+### Dónde verlo evidenciado en el código
+
+- [ ] **Docker DNS interno** → `docker-compose.yml` (líneas 14, 21-25): `--auth-host auth-service` + `expose: 5000`
+- [ ] **getaddrinfo() en C** → `server/src/auth_client.c` (líneas 33-49): `getaddrinfo(g_config.auth_host, ...)` resuelve cualquier hostname
+- [ ] **Documentación DNS** → `docs/dns.md`: estrategia completa de 3 niveles
+- [ ] **nip.io en producción** → `docs/despliegue_aws.md` (líneas 37, 166-170): URL real de acceso
+- [ ] **Elastic IP** → `44.193.101.27` asignada a la instancia EC2 para que los hostnames nip.io siempre apunten al mismo servidor
+
+### Resumen: 3 niveles de DNS
+
+```
+Nivel 1: Docker DNS (interno)     → auth-service → 172.x.x.x (automático)
+Nivel 2: nip.io (acceso público)  → iot-monitor.44.193.101.27.nip.io → 44.193.101.27
+Nivel 3: getaddrinfo() (código C) → resuelve Docker DNS, nip.io, Route 53, /etc/hosts
+```
+
+**Clave:** El mismo binario corre en local, Docker y AWS sin cambiar código. Solo cambia `--auth-host`.
+
